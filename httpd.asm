@@ -97,8 +97,15 @@ _start:
         mov     word [rsp+12H], ax
         call    ?_029
         mov     r13d, eax
-?_008:  xor     edx, edx
+?_008:
+        or      edi, -1
         xor     esi, esi
+        mov     edx, 1
+        xor     ecx, ecx
+        call    ?_022
+        test    eax, eax
+        jg      ?_008
+        xor     edx, edx
         mov     edi, r13d
         call    ?_023
         mov     ebp, eax
@@ -108,7 +115,11 @@ _start:
         call    ?_018
         mov     r12d, eax
         test    eax, eax
-        jnz     ?_008
+        jz      ?_014
+        mov     edi, ebp
+        call    ?_025
+        jmp     ?_008
+?_014:
         mov     r14, qword [rbx+10H]
         lea     r13, [rsp+20H]
 ?_009:  mov     edx, 8192
@@ -156,20 +167,13 @@ _start:
         call    ?_028
         mov     edx, eax
         test    eax, eax
-        jle     ?_014
+        jle     ?_016
         mov     rsi, r13
         mov     edi, ebp
         call    ?_027
         test    eax, eax
         jns     ?_013
         jmp     ?_015
-
-?_014:  mov     edi, ebp
-        mov     esi, 2
-        call    ?_022
-        mov     edi, ebp
-        call    ?_025
-        jmp     ?_016
 
 ?_015:  mov     r12d, 1
 ?_016:  add     rsp, 8224
@@ -181,13 +185,14 @@ _start:
         pop     r14
         call    ?_017
 
+?_022:
+        add     r9, 1
 ?_017:
         add     r9, 3
 ?_018:  add     r9, 3
 ?_019:  add     r9, 4
 ?_020:  add     r9, 1
-?_021:  add     r9, 1
-?_022:  add     r9, 5
+?_021:  add     r9, 6
 ?_023:  add     r9, 2
 ?_024:  add     r9, 38
 ?_025:  add     r9, 1
